@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Local Shop — Fresh Finds, Best Prices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#1F3A2E;
+    --green-deep:#142A21;
+    --cream:#F6F1E4;
+    --terracotta:#D9622B;
+    --ink:#2B2B2B;
+    --paper:#FFFFFF;
+    --line: rgba(31,58,46,0.15);
+    --shadow: 0 10px 30px rgba(31,58,46,0.12);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    font-family:'Inter', sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    margin:0;
+    line-height: 1.05;
+  }
+  a{ text-decoration:none; color:inherit; }
+  button{ font-family:'Inter', sans-serif; cursor:pointer; border:none; }
+  img{ max-width:100%; display:block; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position: fixed;
+    top:0; left:0; right:0;
+    z-index: 50;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    padding: 16px clamp(20px, 5vw, 64px);
+    background: rgba(31,58,46,0.92);
+    backdrop-filter: blur(6px);
+    color: var(--cream);
+  }
+  .nav .brand{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+  }
+  .nav .brand span{ color: var(--terracotta); }
+  .cart-btn{
+    background: var(--terracotta);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight:600;
+    font-size: 0.9rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .cart-btn:hover{ transform: translateY(-1px); box-shadow: 0 6px 16px rgba(217,98,43,0.4); }
+  .cart-count{
+    background: white;
+    color: var(--terracotta);
+    border-radius: 999px;
+    min-width: 20px;
+    height:20px;
+    font-size: 0.75rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    padding: 0 5px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height: 92vh;
+    width:100%;
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+    background: var(--green-deep);
+  }
+  .hero img.bg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.55;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: linear-gradient(180deg, rgba(20,42,33,0.55) 0%, rgba(20,42,33,0.75) 55%, rgba(20,42,33,0.95) 100%);
+  }
+  .hero-content{
+    position:relative;
+    z-index:2;
+    color: var(--cream);
+    padding: 0 clamp(20px, 6vw, 80px);
+    max-width: 900px;
+    margin-top: 70px;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #E7B68C;
+    margin-bottom: 18px;
+    font-weight:600;
+  }
+  .eyebrow::before{
+    content:"";
+    width:8px; height:8px;
+    background: var(--terracotta);
+    border-radius:50%;
+    display:inline-block;
+  }
+  .hero h1{
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    font-weight: 600;
+    color: var(--cream);
+  }
+  .hero h1 em{
+    font-style: italic;
+    color: var(--terracotta);
+    font-weight: 500;
+  }
+  .hero p.tagline{
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    margin-top: 20px;
+    color: rgba(246,241,228,0.85);
+    max-width: 520px;
+    font-weight: 400;
+  }
+  .shop-now{
+    margin-top: 36px;
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    background: var(--terracotta);
+    color:white;
+    padding: 16px 32px;
+    border-radius: 999px;
+    font-size: 1.05rem;
+    font-weight:700;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 8px 24px rgba(217,98,43,0.45);
+  }
+  .shop-now:hover{ transform: translateY(-2px); }
+  .shop-now svg{ transition: transform 0.2s ease; }
+  .shop-now:hover svg{ transform: translateY(3px); }
+
+  /* ---------- SECTION HEADER ---------- */
+  .section-pad{ padding: 90px clamp(20px, 6vw, 80px); }
+  .section-head{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 44px;
+  }
+  .section-head .label{
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    font-weight: 700;
+    margin-bottom: 10px;
+    display:block;
+  }
+  .section-head h2{
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 600;
+    color: var(--green);
+  }
+  .section-head .desc{
+    max-width: 360px;
+    font-size: 0.95rem;
+    color: rgba(43,43,43,0.65);
+  }
+
+  /* ---------- CAROUSEL ---------- */
+  .carousel-wrap{ position: relative; }
+  .carousel{
+    display:flex;
+    gap: 22px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 6px 6px 26px 6px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--terracotta) transparent;
+  }
+  .carousel::-webkit-scrollbar{ height: 6px; }
+  .carousel::-webkit-scrollbar-thumb{ background: rgba(217,98,43,0.4); border-radius: 10px; }
+
+  .card{
+    scroll-snap-align: start;
+    flex: 0 0 260px;
+    background: var(--paper);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display:flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card:hover{ transform: translateY(-6px); box-shadow: 0 16px 36px rgba(31,58,46,0.18); }
+  .card .img-wrap{
+    width:100%;
+    aspect-ratio: 1 / 1;
+    overflow:hidden;
+    background: var(--cream);
+  }
+  .card img{
+    width:100%; height:100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .card:hover img{ transform: scale(1.06); }
+  .card-body{
+    padding: 16px 18px 20px;
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+    flex:1;
+  }
+  .card-body .name{
+    font-family:'Fraunces', serif;
+    font-size: 1.08rem;
+    font-weight:600;
+    color: var(--ink);
+  }
+  .card-body .price{
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--green);
+  }
+  .card-body .price span{
+    font-size: 0.75rem;
+    color: rgba(43,43,43,0.5);
+    font-weight: 500;
+  }
+  .add-btn{
+    margin-top: auto;
+    background: var(--green);
+    color: var(--cream);
+    padding: 11px 0;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+  .add-btn:hover{ background: var(--terracotta); transform: translateY(-1px); }
+  .add-btn.added{ background: #3C7A57; }
+
+  .carousel-nav{
+    display:flex;
+    gap: 10px;
+    justify-content:center;
+    margin-top: 8px;
+  }
+  .carousel-nav button{
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: background 0.2s ease;
+  }
+  .carousel-nav button:hover{ background: var(--green); color: var(--cream); }
+
+  /* ---------- ABOUT STRIP ---------- */
+  .strip{
+    background: var(--green);
+    color: var(--cream);
+    padding: 50px clamp(20px,6vw,80px);
+    display:flex;
+    flex-wrap:wrap;
+    gap: 30px;
+    justify-content: space-between;
+  }
+  .strip .item{ flex:1; min-width: 200px; }
+  .strip .item h3{
+    font-size: 1.4rem;
+    font-weight:600;
+    margin-bottom: 8px;
+    color: var(--cream);
+  }
+  .strip .item p{
+    margin:0;
+    font-size: 0.9rem;
+    color: rgba(246,241,228,0.7);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background: var(--green-deep);
+    color: rgba(246,241,228,0.6);
+    text-align:center;
+    padding: 30px 20px;
+    font-size: 0.85rem;
+  }
+  footer strong{ color: var(--cream); }
+
+  /* ---------- WHATSAPP FLOAT ---------- */
+  .whatsapp-float{
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 58px;
+    height: 58px;
+    background: #25D366;
+    border-radius: 50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    z-index: 60;
+    transition: transform 0.2s ease;
+  }
+  .whatsapp-float:hover{ transform: scale(1.08); }
+
+  /* ---------- CART DRAWER (receipt / torn-paper style) ---------- */
+  .overlay{
+    position: fixed;
+    inset:0;
+    background: rgba(20,42,33,0.5);
+    z-index: 70;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .overlay.open{ opacity:1; pointer-events:all; }
+
+  .drawer{
+    position: fixed;
+    top:0; right:0;
+    height: 100%;
+    width: min(400px, 92vw);
+    background: #FFFEF9;
+    z-index: 80;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    display:flex;
+    flex-direction:column;
+    box-shadow: -10px 0 40px rgba(0,0,0,0.2);
+    font-family: 'Courier New', monospace;
+  }
+  .drawer.open{ transform: translateX(0); }
+
+  .drawer::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height: 14px;
+    background: repeating-linear-gradient(135deg, #FFFEF9 0 8px, transparent 8px 16px), #1F3A2E;
+    background-size: 16px 16px, 100% 100%;
+  }
+
+  .drawer-head{
+    padding: 26px 24px 14px;
+    border-bottom: 2px dashed var(--line);
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+  }
+  .drawer-head h3{
+    font-family:'Fraunces', serif;
+    font-size: 1.4rem;
+    color: var(--green);
+  }
+  .drawer-head .close{
+    background:none;
+    font-size: 1.4rem;
+    color: var(--ink);
+    line-height:1;
+  }
+  .receipt-sub{
+    padding: 10px 24px 0;
+    font-size: 0.75rem;
+    color: rgba(43,43,43,0.55);
+    letter-spacing: 0.04em;
+  }
+
+  .drawer-items{
+    flex:1;
+    overflow-y: auto;
+    padding: 16px 24px;
+  }
+  .empty-cart{
+    text-align:center;
+    color: rgba(43,43,43,0.5);
+    margin-top: 60px;
+    font-size: 0.95rem;
+  }
+  .line-item{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding: 12px 0;
+    border-bottom: 1px dotted var(--line);
+    font-size: 0.9rem;
+    gap: 10px;
+  }
+  .line-item .li-name{ flex:1; font-weight:600; }
+  .line-item .li-qty{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .line-item .li-qty button{
+    width: 22px; height:22px;
+    border-radius:4px;
+    background: var(--cream);
+    border:1px solid var(--line);
+    font-size: 0.85rem;
+    line-height:1;
+  }
+  .line-item .li-price{ width: 64px; text-align:right; font-weight:700; }
+  .line-item .li-remove{
+    background:none;
+    color: var(--terracotta);
+    font-size: 0.95rem;
+  }
+
+  .drawer-foot{
+    border-top: 2px dashed var(--line);
+    padding: 18px 24px 24px;
+  }
+  .total-row{
+    display:flex;
+    justify-content: space-between;
+    font-family:'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight:700;
+    color: var(--green);
+    margin-bottom: 18px;
+  }
+  .checkout-form input, .checkout-form textarea{
+    width:100%;
+    font-family:'Inter', sans-serif;
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    background: var(--paper);
+  }
+  .checkout-form input:focus, .checkout-form textarea:focus{
+    outline: 2px solid var(--terracotta);
+    outline-offset: 1px;
+  }
+  .send-order{
+    width:100%;
+    background: var(--terracotta);
+    color:white;
+    padding: 13px 0;
+    border-radius: 10px;
+    font-weight:700;
+    font-size: 0.95rem;
+    font-family:'Inter', sans-serif;
+    transition: background 0.2s ease;
+  }
+  .send-order:hover{ background: #c2531f; }
+  .form-note{
+    font-size: 0.72rem;
+    color: rgba(43,43,43,0.5);
+    margin-top: 8px;
+    text-align:center;
+    font-family:'Inter', sans-serif;
+  }
+
+  @media (max-width: 640px){
+    .hero{ min-height: 85vh; }
+    .section-pad{ padding: 60px 20px; }
+    .card{ flex-basis: 220px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="brand">the local <span>shop</span></div>
+  <button class="cart-btn" id="openCartBtn" aria-label="Open cart">
+    🛍 Cart <span class="cart-count" id="cartCount">0</span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="hero">
+  <img class="bg" src="https://i.ibb.co/yFr0P33p/image.jpg" alt="The Local Shop storefront" />
+  <div class="hero-content">
+    <span class="eyebrow">Your neighbourhood favourite</span>
+    <h1>Fresh finds, <em>best prices</em> — every single day.</h1>
+    <p class="tagline">From the morning's first loaf to the last-minute essentials, The Local Shop keeps your shelves stocked without the markup.</p>
+    <a href="#products" class="shop-now">
+      Shop Now
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 4v16m0 0l-6-6m6 6l6-6" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</header>
+
+<!-- PRODUCTS -->
+<section class="section-pad" id="products">
+  <div class="section-head">
+    <div>
+      <span class="label">This week's picks</span>
+      <h2>Straight off the shelf</h2>
+    </div>
+    <p class="desc">Scroll through our hand-picked everyday essentials — tap any arrow, or just swipe.</p>
+  </div>
+
+  <div class="carousel-wrap">
+    <div class="carousel" id="carousel">
+      <!-- Cards injected by JS -->
+    </div>
+    <div class="carousel-nav">
+      <button id="prevBtn" aria-label="Scroll left">←</button>
+      <button id="nextBtn" aria-label="Scroll right">→</button>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT STRIP -->
+<div class="strip">
+  <div class="item">
+    <h3>Open daily</h3>
+    <p>7:00 AM – 10:00 PM, every day of the week, including holidays.</p>
+  </div>
+  <div class="item">
+    <h3>Local sourcing</h3>
+    <p>We work directly with nearby farms, bakers, and suppliers.</p>
+  </div>
+  <div class="item">
+    <h3>Easy ordering</h3>
+    <p>Add what you need, send us your order, and we'll have it ready.</p>
+  </div>
+</div>
+
+<footer>
+  Made with care by <strong>The Local Shop</strong> · Reach us anytime at <strong>theLocalshop001@gmail.com</strong>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a class="whatsapp-float" href="https://wa.me/919999999999" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 32 32" fill="white"><path d="M16.001 3.2c-7.07 0-12.8 5.73-12.8 12.8 0 2.27.6 4.45 1.73 6.37L3.2 28.8l6.6-1.7a12.74 12.74 0 0 0 6.2 1.58h.001c7.07 0 12.8-5.73 12.8-12.8s-5.73-12.68-12.8-12.68zm0 23.3a10.45 10.45 0 0 1-5.34-1.46l-.38-.22-3.92 1.01 1.05-3.82-.25-.39a10.45 10.45 0 0 1-1.6-5.62c0-5.78 4.7-10.48 10.48-10.48 5.78 0 10.48 4.7 10.48 10.48s-4.74 10.5-10.52 10.5zm5.74-7.86c-.31-.16-1.85-.91-2.13-1.02-.29-.1-.5-.16-.7.16-.21.31-.81 1.02-.99 1.23-.18.21-.36.23-.67.08-.31-.16-1.3-.48-2.47-1.52-.91-.81-1.53-1.81-1.71-2.12-.18-.31-.02-.48.13-.64.16-.16.36-.4.54-.6.18-.2.24-.34.36-.57.12-.23.06-.42-.04-.58-.1-.16-.7-1.68-.96-2.3-.25-.6-.5-.52-.7-.53-.18-.01-.39-.01-.6-.01-.21 0-.55.08-.84.4-.29.31-1.11 1.09-1.11 2.66 0 1.57 1.14 3.08 1.3 3.3.16.21 2.18 3.33 5.28 4.54 2.6 1.02 3.13.82 3.7.77.57-.05 1.85-.76 2.11-1.49.26-.73.26-1.36.18-1.49-.08-.13-.31-.21-.62-.37z"/></svg>
+</a>
+
+<!-- CART DRAWER -->
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer" aria-label="Shopping cart">
+  <div class="drawer-head">
+    <h3>Your basket</h3>
+    <button class="close" id="closeDrawer" aria-label="Close cart">✕</button>
+  </div>
+  <div class="receipt-sub">THE LOCAL SHOP · ORDER SLIP</div>
+  <div class="drawer-items" id="drawerItems">
+    <p class="empty-cart">Your basket is empty.<br/>Go on, add something fresh.</p>
+  </div>
+  <div class="drawer-foot">
+    <div class="total-row"><span>Total</span><span id="totalPrice">₹0</span></div>
+    <form class="checkout-form" id="checkoutForm">
+      <input type="text" id="custName" placeholder="Your name" required />
+      <input type="tel" id="custPhone" placeholder="Phone number" required pattern="[0-9+\-\s]{7,15}" />
+      <button type="submit" class="send-order">Send order via Email ✉️</button>
+      <p class="form-note">Opens your email app with the order pre-filled. Nothing is sent automatically.</p>
+    </form>
+  </div>
+</div>
+
+<script>
+  // ---------- PRODUCT DATA ----------
+  const SHOP_EMAIL = "theLocalshop001@gmail.com";
+  const products = [
+    { id: 1, name: "Farm Fresh Tomatoes (1kg)", price: 49, img: "https://images.unsplash.com/photo-1582284540020-8acbe03f4924?w=500&q=80" },
+    { id: 2, name: "Organic Bananas (dozen)", price: 39, img: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=500&q=80" },
+    { id: 3, name: "Whole Wheat Bread", price: 45, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&q=80" },
+    { id: 4, name: "Farm Eggs (12 pcs)", price: 84, img: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=500&q=80" },
+    { id: 5, name: "Toned Milk (1L)", price: 32, img: "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=500&q=80" },
+    { id: 6, name: "Basmati Rice (5kg)", price: 399, img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&q=80" },
+    { id: 7, name: "Sunflower Oil (1L)", price: 145, img: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500&q=80" },
+    { id: 8, name: "Mixed Spice Box", price: 220, img: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500&q=80" },
+  ];
+
+  let cart = {}; // { id: { ...product, qty } }
+
+  const fmt = (n) => "₹" + n.toLocaleString("en-IN");
+
+  // ---------- RENDER CAROUSEL ----------
+  const carousel = document.getElementById("carousel");
+  carousel.innerHTML = products.map(p => `
+    <div class="card">
+      <div class="img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy" /></div>
+      <div class="card-body">
+        <div class="name">${p.name}</div>
+        <div class="price">${fmt(p.price)} <span>/ unit</span></div>
+        <button class="add-btn" data-id="${p.id}">Add to Cart 🛒</button>
+      </div>
+    </div>
+  `).join("");
+
+  carousel.querySelectorAll(".add-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = Number(btn.dataset.id);
+      addToCart(id);
+      btn.textContent = "Added ✓";
+      btn.classList.add("added");
+      setTimeout(() => {
+        btn.textContent = "Add to Cart 🛒";
+        btn.classList.remove("added");
+      }, 900);
+    });
+  });
+
+  // ---------- CAROUSEL NAV ----------
+  document.getElementById("prevBtn").addEventListener("click", () => {
+    carousel.scrollBy({ left: -280, behavior: "smooth" });
+  });
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    carousel.scrollBy({ left: 280, behavior: "smooth" });
+  });
+
+  // Optional gentle auto-scroll, pauses on interaction
+  let autoScroll = setInterval(() => {
+    if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 5) {
+      carousel.scrollTo({ left: 0, behavior: "smooth" });
+    } else {
+      carousel.scrollBy({ left: 280, behavior: "smooth" });
+    }
+  }, 3500);
+  ["mouseenter", "touchstart", "wheel"].forEach(evt =>
+    carousel.addEventListener(evt, () => clearInterval(autoScroll), { passive: true })
+  );
+
+  // ---------- CART LOGIC ----------
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+    if (cart[id]) cart[id].qty += 1;
+    else cart[id] = { ...product, qty: 1 };
+    renderCart();
+  }
+
+  function changeQty(id, delta) {
+    if (!cart[id]) return;
+    cart[id].qty += delta;
+    if (cart[id].qty <= 0) delete cart[id];
+    renderCart();
+  }
+
+  function removeItem(id) {
+    delete cart[id];
+    renderCart();
+  }
+
+  function renderCart() {
+    const items = Object.values(cart);
+    const drawerItems = document.getElementById("drawerItems");
+    const cartCount = document.getElementById("cartCount");
+    const totalPrice = document.getElementById("totalPrice");
+
+    const totalQty = items.reduce((sum, i) => sum + i.qty, 0);
+    const totalCost = items.reduce((sum, i) => sum + i.qty * i.price, 0);
+
+    cartCount.textContent = totalQty;
+    totalPrice.textContent = fmt(totalCost);
+
+    if (items.length === 0) {
+      drawerItems.innerHTML = `<p class="empty-cart">Your basket is empty.<br/>Go on, add something fresh.</p>`;
+      return;
+    }
+
+    drawerItems.innerHTML = items.map(i => `
+      <div class="line-item">
+        <div class="li-name">${i.name}</div>
+        <div class="li-qty">
+          <button data-action="dec" data-id="${i.id}">−</button>
+          <span>${i.qty}</span>
+          <button data-action="inc" data-id="${i.id}">+</button>
+        </div>
+        <div class="li-price">${fmt(i.qty * i.price)}</div>
+        <button class="li-remove" data-action="remove" data-id="${i.id}" aria-label="Remove">✕</button>
+      </div>
+    `).join("");
+
+    drawerItems.querySelectorAll("button").forEach(btn => {
+      const id = Number(btn.dataset.id);
+      const action = btn.dataset.action;
+      btn.addEventListener("click", () => {
+        if (action === "inc") changeQty(id, 1);
+        if (action === "dec") changeQty(id, -1);
+        if (action === "remove") removeItem(id);
+      });
+    });
+  }
+
+  // ---------- DRAWER OPEN/CLOSE ----------
+  const drawer = document.getElementById("drawer");
+  const overlay = document.getElementById("overlay");
+
+  function openDrawer() {
+    drawer.classList.add("open");
+    overlay.classList.add("open");
+  }
+  function closeDrawerFn() {
+    drawer.classList.remove("open");
+    overlay.classList.remove("open");
+  }
+
+  document.getElementById("openCartBtn").addEventListener("click", openDrawer);
+  document.getElementById("closeDrawer").addEventListener("click", closeDrawerFn);
+  overlay.addEventListener("click", closeDrawerFn);
+
+  // ---------- EMAIL ORDER ----------
+  document.getElementById("checkoutForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const items = Object.values(cart);
+    if (items.length === 0) {
+      alert("Your basket is empty — add a few items first!");
+      return;
+    }
+
+    const name = document.getElementById("custName").value.trim();
+    const phone = document.getElementById("custPhone").value.trim();
+    if (!name || !phone) return;
+
+    const total = items.reduce((sum, i) => sum + i.qty * i.price, 0);
+    const itemLines = items.map(i => `- ${i.name} x${i.qty} = ${fmt(i.qty * i.price)}`).join("\n");
+
+    const subject = `New Order from ${name}`;
+    const body =
+`Customer Name: ${name}
+Phone Number: ${phone}
+
+Order Items:
+${itemLines}
+
+Total: ${fmt(total)}
+
+— Sent from The Local Shop website`;
+
+    const mailto = `mailto:${SHOP_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+  });
+</script>
+
+</body>
+</html>
